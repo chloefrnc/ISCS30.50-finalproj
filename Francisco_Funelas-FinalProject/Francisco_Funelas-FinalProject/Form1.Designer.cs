@@ -28,26 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblWordle = new Label();
             btnRestart = new Button();
             btnShare = new Button();
             SuspendLayout();
-            // 
-            // lblWordle
-            // 
-            lblWordle.AutoSize = true;
-            lblWordle.Location = new Point(228, 70);
-            lblWordle.Name = "lblWordle";
-            lblWordle.Size = new Size(96, 15);
-            lblWordle.TabIndex = 0;
-            lblWordle.Text = "Big Wordle Label";
             // 
             // btnRestart
             // 
             btnRestart.Location = new Point(12, 11);
             btnRestart.Margin = new Padding(3, 2, 3, 2);
             btnRestart.Name = "btnRestart";
-            btnRestart.Size = new Size(100, 22);
+            btnRestart.Size = new Size(100, 36);
             btnRestart.TabIndex = 1;
             btnRestart.Text = "Restart Game";
             btnRestart.UseVisualStyleBackColor = true;
@@ -57,7 +47,7 @@
             // 
             btnShare.Location = new Point(563, 12);
             btnShare.Name = "btnShare";
-            btnShare.Size = new Size(75, 23);
+            btnShare.Size = new Size(75, 35);
             btnShare.TabIndex = 2;
             btnShare.Text = "Share";
             btnShare.UseVisualStyleBackColor = true;
@@ -69,18 +59,14 @@
             ClientSize = new Size(650, 691);
             Controls.Add(btnShare);
             Controls.Add(btnRestart);
-            Controls.Add(lblWordle);
             Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Wordle";
             Load += Form1_Load;
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private Label lblWordle;
         private Button btnRestart;
         private Button btnShare;
     }

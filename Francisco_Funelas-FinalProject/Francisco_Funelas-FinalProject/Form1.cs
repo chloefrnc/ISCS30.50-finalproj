@@ -11,7 +11,7 @@ namespace Francisco_Funelas_FinalProject
         private Button[,] keyboard;
         private int currRow, currCol;
         private string correctWord;
-        private XmlDocument answerDoc, validWordDoc;
+        private XmlDocument answerDoc, validWordDoc, historyDoc;
         private bool winner;
         private int formWidth, formHeight;
         private Dictionary<char, Button> keyButtons = new Dictionary<char, Button>();
@@ -31,6 +31,8 @@ namespace Francisco_Funelas_FinalProject
             answerDoc.Load("answers.xml");
             validWordDoc = new XmlDocument();
             validWordDoc.Load("validwords.xml");
+            historyDoc = new XmlDocument();
+            historyDoc.Load("sharehistory.xml");
             correctWord = SelectWord();
             winner = false;
             formWidth = this.ClientSize.Width;
@@ -44,7 +46,7 @@ namespace Francisco_Funelas_FinalProject
             int size = 50;
             int padding = 10;
             int leftMargin = (formWidth - (5 * size + 4 * padding)) / 2;
-            int topMargin = 150;
+            int topMargin = 120;
 
             for (int r = 0; r < 6; r++)
             {
@@ -78,7 +80,7 @@ namespace Francisco_Funelas_FinalProject
 
             int size = 40;
             int padding = 5;
-            int topMargin = 550;
+            int topMargin = 520;
 
             for (int r = 0; r < 3; r++)
             {
@@ -131,8 +133,6 @@ namespace Francisco_Funelas_FinalProject
             XmlNodeList options = root.ChildNodes;
             Random r = new Random();
             int i = r.Next(options.Count);
-            // Delete later:
-            MessageBox.Show(options[i].InnerText);
             return options[i].InnerText;
         }
 
@@ -243,7 +243,7 @@ namespace Francisco_Funelas_FinalProject
             currRow++;
             currCol = 0;
 
-            if (currRow >= 6)
+            if (currRow >= 6 && !winner)
             {
                 MessageBox.Show("You have run out of attempts. The word was " + correctWord + ".");
             }
@@ -317,17 +317,44 @@ namespace Francisco_Funelas_FinalProject
             sb.AppendLine($"Wordle {score}/6");
             sb.AppendLine();
 
+            XmlNode root = historyDoc.DocumentElement;
+            XmlNode game = historyDoc.CreateElement("game");
+            XmlNode status = historyDoc.CreateElement("status");
+            status.InnerText = winner ? "win" : "lose";
+            game.AppendChild(status);
+
             for (int r = 0; r < currRow; r++)
             {
+                StringBuilder attempt = new StringBuilder();
+
                 for (int c = 0; c < 5; c++)
                 {
                     Color bg = grid[r, c].BackColor;
-                    if (bg == colorCorrect) sb.Append("🟩");
-                    else if (bg == colorPresent) sb.Append("🟨");
-                    else sb.Append("⬛");
+                    if (bg == colorCorrect)
+                    {
+                        sb.Append("🟩");
+                        attempt.Append("🟩");
+                    }
+                    else if (bg == colorPresent)
+                    {
+                        sb.Append("🟨");
+                        attempt.Append("🟨");
+                    }
+                    else
+                    {
+                        sb.Append("⬛");
+                        attempt.Append("⬛");
+                    }
                 }
                 sb.AppendLine();
+                XmlNode attemptNode = historyDoc.CreateElement("attempt");
+                attemptNode.InnerText = attempt.ToString();
+                game.AppendChild(attemptNode);
             }
+
+            root.AppendChild(game);
+            historyDoc.Save("sharehistory.xml");
+
             Clipboard.SetText(sb.ToString());
             MessageBox.Show("Results copied to clipboard!");
         }
