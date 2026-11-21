@@ -1,8 +1,5 @@
 .vs/
-bin/
 obj/
 *.user
 *.suo
 *.vsidx
-
-# just place xml files back in bin for own testing
