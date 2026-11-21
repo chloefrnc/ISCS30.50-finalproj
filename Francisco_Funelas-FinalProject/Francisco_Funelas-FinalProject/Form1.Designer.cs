@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            lblWordle = new Label();
+            SuspendLayout();
+            // 
+            // lblWordle
+            // 
+            lblWordle.AutoSize = true;
+            lblWordle.Location = new Point(151, 587);
+            lblWordle.Name = "lblWordle";
+            lblWordle.Size = new Size(359, 20);
+            lblWordle.TabIndex = 0;
+            lblWordle.Text = "WORDLE (labels will be removed later, just checking)";
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(666, 723);
+            Controls.Add(lblWordle);
+            Name = "Form1";
             Text = "Form1";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label lblWordle;
     }
 }
