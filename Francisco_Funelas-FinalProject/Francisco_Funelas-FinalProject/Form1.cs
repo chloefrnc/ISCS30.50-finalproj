@@ -285,8 +285,17 @@ namespace Francisco_Funelas_FinalProject
                 {
                     grid[r, c].Text = "";
                     grid[r, c].BackColor = Color.White;
+                    grid[r, c].ForeColor = Color.Black;
                 }
             }
+            
+            foreach (Button key in keyButtons.Values)
+            {
+                key.BackColor = Color.White;
+                key.ForeColor = Color.Black;
+            }
+
+            this.ActiveControl = null;
             correctWord = SelectWord();
         }
 
