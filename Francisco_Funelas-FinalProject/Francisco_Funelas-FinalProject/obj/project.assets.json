@@ -8,19 +8,24 @@
     "net10.0-windows": []
   },
   "packageFolders": {
-    "C:\\Users\\Chloe Francisco\\.nuget\\packages\\": {}
+    "C:\\Users\\Gelo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Chloe\\irl stuff\\ateneo\\yr4sem1\\ISCS 30.50\\ISCS30.50-finalproj\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject.csproj",
+      "projectUniqueName": "F:\\Documents\\ISCS30.50-finalproj\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject.csproj",
       "projectName": "Francisco_Funelas-FinalProject",
-      "projectPath": "D:\\Chloe\\irl stuff\\ateneo\\yr4sem1\\ISCS 30.50\\ISCS30.50-finalproj\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject.csproj",
-      "packagesPath": "C:\\Users\\Chloe Francisco\\.nuget\\packages\\",
-      "outputPath": "D:\\Chloe\\irl stuff\\ateneo\\yr4sem1\\ISCS 30.50\\ISCS30.50-finalproj\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject\\obj\\",
+      "projectPath": "F:\\Documents\\ISCS30.50-finalproj\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject.csproj",
+      "packagesPath": "C:\\Users\\Gelo\\.nuget\\packages\\",
+      "outputPath": "F:\\Documents\\ISCS30.50-finalproj\\Francisco_Funelas-FinalProject\\Francisco_Funelas-FinalProject\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Chloe Francisco\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Gelo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

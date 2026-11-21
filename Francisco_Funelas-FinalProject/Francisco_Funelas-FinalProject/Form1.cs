@@ -1,4 +1,6 @@
+using System.Diagnostics.Metrics;
 using System.Drawing.Text;
+using System.Text;
 using System.Xml;
 
 namespace Francisco_Funelas_FinalProject
@@ -12,6 +14,11 @@ namespace Francisco_Funelas_FinalProject
         private XmlDocument answerDoc, validWordDoc;
         private bool winner;
         private int formWidth, formHeight;
+        private Dictionary<char, Button> keyButtons = new Dictionary<char, Button>();
+        private Color colorCorrect = ColorTranslator.FromHtml("#6aaa64");
+        private Color colorPresent = ColorTranslator.FromHtml("#c9b458");
+        private Color colorAbsent = ColorTranslator.FromHtml("#787c7e");
+
 
         public Form1()
         {
@@ -49,6 +56,7 @@ namespace Francisco_Funelas_FinalProject
                     letter.Height = size;
                     letter.Left = leftMargin + (c * (size + padding));
                     letter.Top = topMargin + (r * (size + padding));
+                    letter.Font = new Font("Segoe UI", 18, FontStyle.Bold);
                     letter.BackColor = Color.White;
                     letter.Text = "";
                     letter.TextAlign = ContentAlignment.MiddleCenter;
@@ -89,6 +97,7 @@ namespace Francisco_Funelas_FinalProject
                     key.Click += keyboard_Click;
 
                     keyboard[r, c] = key;
+                    keyButtons[keys[r][c]] = key;
                     this.Controls.Add(key);
                 }
             }
@@ -150,7 +159,9 @@ namespace Francisco_Funelas_FinalProject
             {
                 if (s[i] == char.ToUpper(correctWord[i]))
                 {
-                    grid[currRow, i].BackColor = Color.Green;
+                    grid[currRow, i].BackColor = colorCorrect;
+                    grid[currRow, i].ForeColor = Color.White;
+                    UpdateKeyColor(s[i], colorCorrect);
                     alphabet[s[i] - 'A']--;
                 }
             }
@@ -165,34 +176,45 @@ namespace Francisco_Funelas_FinalProject
                 int j = s[i] - 'A';
                 if (alphabet[j] > 0)
                 {
-                    grid[currRow, i].BackColor = Color.Yellow;
+                    grid[currRow, i].BackColor = colorPresent;
+                    grid[currRow, i].ForeColor = Color.White;
+                    UpdateKeyColor(s[i], colorPresent);
                     alphabet[j]--;
                 }
 
                 else
                 {
-                    grid[currRow, i].BackColor = Color.Gray;
+                    grid[currRow, i].BackColor = colorAbsent;
+                    grid[currRow, i].ForeColor = Color.White;
+                    UpdateKeyColor(s[i], colorAbsent);
                 }
             }
         }
 
-        private void keyboard_Click(object sender, EventArgs e)
+        private void UpdateKeyColor(char letter, Color newColor)
         {
-            if (winner) return;
+            if (!keyButtons.TryGetValue(letter, out Button? btn)) return;
 
-            Button key = (Button)sender;
+            if (btn.BackColor == colorCorrect) return;
+            if (btn.BackColor == colorPresent && newColor == colorAbsent) return;
 
+            btn.BackColor = newColor;
+            btn.ForeColor = Color.White;
+        }
+
+        private void AddLetter(string letter)
+        {
+            if (winner || currRow >= 6) return;
             if (currCol < 5)
             {
-                grid[currRow, currCol].Text = key.Text;
+                grid[currRow, currCol].Text = letter;
                 currCol++;
             }
         }
 
-        private void backspace_Click(object sender, EventArgs e)
+        private void DeleteLetter()
         {
-            if (winner) return;
-
+            if (winner || currRow >= 6) return;
             if (currCol > 0)
             {
                 currCol--;
@@ -200,8 +222,9 @@ namespace Francisco_Funelas_FinalProject
             }
         }
 
-        private void enter_Click(object sender, EventArgs e)
+        private void SubmitGuess()
         {
+
             if (winner) return;
             if (currRow >= 6) return;
             if (currCol < 5) return;
@@ -226,6 +249,31 @@ namespace Francisco_Funelas_FinalProject
             }
         }
 
+        private void keyboard_Click(object sender, EventArgs e) => AddLetter(((Button)sender).Text);
+        private void backspace_Click(object sender, EventArgs e) => DeleteLetter();
+        private void enter_Click(object sender, EventArgs e) => SubmitGuess();
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData >= Keys.A && keyData <= Keys.Z)
+            {
+                AddLetter(keyData.ToString());
+                return true;
+            }
+            if (keyData == Keys.Back)
+            {
+                DeleteLetter();
+                return true;
+            }
+            if (keyData == Keys.Enter)
+            {
+                SubmitGuess();
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void btnRestart_Click(object sender, EventArgs e)
         {
             currRow = 0;
@@ -233,13 +281,46 @@ namespace Francisco_Funelas_FinalProject
             winner = false;
             for (int r = 0; r < 6; r++)
             {
-                for (int  c = 0; c < 5; c++)
+                for (int c = 0; c < 5; c++)
                 {
                     grid[r, c].Text = "";
                     grid[r, c].BackColor = Color.White;
                 }
             }
             correctWord = SelectWord();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnShare_Click(object sender, EventArgs e)
+        {
+            if (!winner && currRow < 6)
+            {
+                MessageBox.Show("Finish the game first before sharing!");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            string score = winner ? currRow.ToString() : "X";
+            sb.AppendLine($"Wordle {score}/6");
+            sb.AppendLine();
+
+            for (int r = 0; r < currRow; r++)
+            {
+                for (int c = 0; c < 5; c++)
+                {
+                    Color bg = grid[r, c].BackColor;
+                    if (bg == colorCorrect) sb.Append("🟩");
+                    else if (bg == colorPresent) sb.Append("🟨");
+                    else sb.Append("⬛");
+                }
+                sb.AppendLine();
+            }
+            Clipboard.SetText(sb.ToString());
+            MessageBox.Show("Results copied to clipboard!");
         }
     }
 }
