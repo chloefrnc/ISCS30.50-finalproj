@@ -1,3 +1,6 @@
+using System.Drawing.Text;
+using System.Xml;
+
 namespace Francisco_Funelas_FinalProject
 {
     public partial class Form1 : Form
@@ -5,6 +8,9 @@ namespace Francisco_Funelas_FinalProject
         private Label[,] grid;
         private Button[,] keyboard;
         private int currRow, currCol;
+        private string correctWord;
+        private XmlDocument answerDoc, validWordDoc;
+        private bool winner;
         private int formWidth, formHeight;
 
         public Form1()
@@ -14,10 +20,18 @@ namespace Francisco_Funelas_FinalProject
             keyboard = new Button[3, 10];
             currRow = 0;
             currCol = 0;
+            answerDoc = new XmlDocument();
+            answerDoc.Load("answers.xml");
+            validWordDoc = new XmlDocument();
+            validWordDoc.Load("validwords.xml");
+            correctWord = SelectWord();
+            winner = false;
             formWidth = this.ClientSize.Width;
             formHeight = this.ClientSize.Height;
             CreateGrid();
             CreateKeyboard();
+            // Delete later:
+            MessageBox.Show(correctWord);
         }
 
         private void CreateGrid()
@@ -104,8 +118,66 @@ namespace Francisco_Funelas_FinalProject
             this.Controls.Add(enter);
         }
 
+        private string SelectWord()
+        {
+            XmlNode root = answerDoc.DocumentElement;
+            XmlNodeList options = root.ChildNodes;
+            Random r = new Random();
+            int i = r.Next(options.Count);
+            return options[i].InnerText;
+        }
+
+        private bool IsValid(string s)
+        {
+            XmlNode root = validWordDoc.DocumentElement;
+            XmlNodeList words = root.ChildNodes;
+
+            foreach (XmlNode word in words)
+            {
+                if (word.InnerText.Equals(s.ToLower())) return true;
+            }
+
+            return false;
+        }
+
+        private void ColorLabel(string s)
+        {
+            int[] alphabet = new int[26];
+
+            foreach (char letter in correctWord.ToUpper()) alphabet[letter - 'A']++;
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (s[i] == char.ToUpper(correctWord[i])) {
+                    grid[currRow, i].BackColor = Color.Green;
+                    alphabet[s[i] - 'A']--;
+                }
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (s[i] == char.ToUpper(correctWord[i])) {
+                    continue;
+                }
+
+                int j = s[i] - 'A';
+                if (alphabet[j] > 0)
+                {
+                    grid[currRow, i].BackColor = Color.Yellow;
+                    alphabet[j]--;
+                }
+
+                else
+                {
+                    grid[currRow, i].BackColor = Color.Gray;
+                }
+            }
+        }
+
         private void keyboard_Click(object sender, EventArgs e)
         {
+            if (winner) return;
+
             Button key = (Button)sender;
 
             if (currCol < 5)
@@ -117,6 +189,8 @@ namespace Francisco_Funelas_FinalProject
 
         private void backspace_Click(object sender, EventArgs e)
         {
+            if (winner) return;
+
             if (currCol > 0)
             {
                 currCol--;
@@ -126,12 +200,28 @@ namespace Francisco_Funelas_FinalProject
 
         private void enter_Click(object sender, EventArgs e)
         {
-            if (currCol == 5)
+            if (winner) return;
+            if (currRow >= 6) return;
+            if (currCol < 5) return;
+
+            string guess = "";
+            for (int i = 0; i < 5; i++)
             {
-                currRow++;
-                currCol = 0;
+                guess += grid[currRow, i].Text;
             }
-            // need to add right/wrong word and check guess + recoloring
+
+            if (!IsValid(guess)) return;
+            ColorLabel(guess);
+
+            if (guess.Equals(correctWord.ToUpper())) winner = true;
+
+            currRow++;
+            currCol = 0;
+
+            if (currRow >= 6)
+            {
+                MessageBox.Show("You have run out of attempts. The word was " + correctWord + ".");
+            }
         }
     }
 }
