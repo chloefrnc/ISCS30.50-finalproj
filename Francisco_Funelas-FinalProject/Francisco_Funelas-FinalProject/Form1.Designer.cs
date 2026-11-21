@@ -29,22 +29,34 @@
         private void InitializeComponent()
         {
             lblWordle = new Label();
+            btnRestart = new Button();
             SuspendLayout();
             // 
             // lblWordle
             // 
             lblWordle.AutoSize = true;
-            lblWordle.Location = new Point(151, 587);
+            lblWordle.Location = new Point(261, 94);
             lblWordle.Name = "lblWordle";
-            lblWordle.Size = new Size(359, 20);
+            lblWordle.Size = new Size(123, 20);
             lblWordle.TabIndex = 0;
-            lblWordle.Text = "WORDLE (labels will be removed later, just checking)";
+            lblWordle.Text = "Big Wordle Label";
+            // 
+            // btnRestart
+            // 
+            btnRestart.Location = new Point(540, 12);
+            btnRestart.Name = "btnRestart";
+            btnRestart.Size = new Size(114, 29);
+            btnRestart.TabIndex = 1;
+            btnRestart.Text = "Restart Game";
+            btnRestart.UseVisualStyleBackColor = true;
+            btnRestart.Click += btnRestart_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(666, 723);
+            Controls.Add(btnRestart);
             Controls.Add(lblWordle);
             Name = "Form1";
             Text = "Form1";
@@ -55,5 +67,6 @@
         #endregion
 
         private Label lblWordle;
+        private Button btnRestart;
     }
 }

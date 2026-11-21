@@ -30,8 +30,6 @@ namespace Francisco_Funelas_FinalProject
             formHeight = this.ClientSize.Height;
             CreateGrid();
             CreateKeyboard();
-            // Delete later:
-            MessageBox.Show(correctWord);
         }
 
         private void CreateGrid()
@@ -39,7 +37,7 @@ namespace Francisco_Funelas_FinalProject
             int size = 50;
             int padding = 10;
             int leftMargin = (formWidth - (5 * size + 4 * padding)) / 2;
-            int topMargin = 150; // temp value
+            int topMargin = 150;
 
             for (int r = 0; r < 6; r++)
             {
@@ -124,6 +122,8 @@ namespace Francisco_Funelas_FinalProject
             XmlNodeList options = root.ChildNodes;
             Random r = new Random();
             int i = r.Next(options.Count);
+            // Delete later:
+            MessageBox.Show(options[i].InnerText);
             return options[i].InnerText;
         }
 
@@ -148,7 +148,8 @@ namespace Francisco_Funelas_FinalProject
 
             for (int i = 0; i < 5; i++)
             {
-                if (s[i] == char.ToUpper(correctWord[i])) {
+                if (s[i] == char.ToUpper(correctWord[i]))
+                {
                     grid[currRow, i].BackColor = Color.Green;
                     alphabet[s[i] - 'A']--;
                 }
@@ -156,7 +157,8 @@ namespace Francisco_Funelas_FinalProject
 
             for (int i = 0; i < 5; i++)
             {
-                if (s[i] == char.ToUpper(correctWord[i])) {
+                if (s[i] == char.ToUpper(correctWord[i]))
+                {
                     continue;
                 }
 
@@ -222,6 +224,22 @@ namespace Francisco_Funelas_FinalProject
             {
                 MessageBox.Show("You have run out of attempts. The word was " + correctWord + ".");
             }
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            currRow = 0;
+            currCol = 0;
+            winner = false;
+            for (int r = 0; r < 6; r++)
+            {
+                for (int  c = 0; c < 5; c++)
+                {
+                    grid[r, c].Text = "";
+                    grid[r, c].BackColor = Color.White;
+                }
+            }
+            correctWord = SelectWord();
         }
     }
 }
