@@ -83,15 +83,25 @@ namespace Francisco_Funelas_FinalProject
 
             int lastRowWidth = keys[2].Length * (size + padding) - padding;
             int lastRowMargin = (formWidth - lastRowWidth) / 2;
+
             Button backspace = new Button();
             backspace.Text = "⌫";
             backspace.Width = 60;
             backspace.Height = size;
-            backspace.Left = lastRowMargin + lastRowWidth + padding;
+            backspace.Left = lastRowMargin - 60 - padding;
             backspace.Top = topMargin + 2 * (size + padding);
             backspace.Click += backspace_Click;
 
+            Button enter = new Button();
+            enter.Text = "⏎";
+            enter.Width = 60;
+            enter.Height = size;
+            enter.Left = lastRowMargin + lastRowWidth + padding;
+            enter.Top = topMargin + 2 * (size + padding);
+            enter.Click += enter_Click;
+
             this.Controls.Add(backspace);
+            this.Controls.Add(enter);
         }
 
         private void keyboard_Click(object sender, EventArgs e)
@@ -112,6 +122,16 @@ namespace Francisco_Funelas_FinalProject
                 currCol--;
                 grid[currRow, currCol].Text = "";
             }
+        }
+
+        private void enter_Click(object sender, EventArgs e)
+        {
+            if (currCol == 5)
+            {
+                currRow++;
+                currCol = 0;
+            }
+            // need to add right/wrong word and check guess + recoloring
         }
     }
 }
